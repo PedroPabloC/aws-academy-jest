@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProfesoreDto } from './dto/create-profesore.dto';
 import { UpdateProfesoreDto } from './dto/update-profesore.dto';
+import { Profesor } from './entities/profesore.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class ProfesoresService {
+  private profesores: Profesor[] = [];
+
   create(createProfesoreDto: CreateProfesoreDto) {
-    return 'This action adds a new profesore';
+    const newProfesor: Profesor = {
+      id: uuidv4(),
+      ...createProfesoreDto,
+    };
+    this.profesores.push(newProfesor);
+    return newProfesor;
   }
 
   findAll() {
-    return `This action returns all profesores`;
+    return this.profesores;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} profesore`;
+  findOne(id: string) {
+    const profesor = this.profesores.find((p) => p.id === id);
+    if (!profesor) {
+      throw new NotFoundException(`Profesor con id ${id} no encontrado`);
+    }
+    return profesor;
   }
 
-  update(id: number, updateProfesoreDto: UpdateProfesoreDto) {
-    return `This action updates a #${id} profesore`;
+  update(id: string, updateProfesoreDto: UpdateProfesoreDto) {
+    const profesor = this.findOne(id);
+    const index = this.profesores.findIndex((p) => p.id === id);
+
+    const profesorActualizado = { ...profesor, ...updateProfesoreDto };
+    this.profesores[index] = profesorActualizado;
+
+    return profesorActualizado;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} profesore`;
+  remove(id: string) {
+    const profesor = this.findOne(id);
+    this.profesores = this.profesores.filter((p) => p.id !== id);
   }
 }

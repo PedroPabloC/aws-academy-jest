@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  HttpCode,
+  HttpStatus,
+  ParseUUIDPipe,
+} from '@nestjs/common';
 import { ProfesoresService } from './profesores.service';
 import { CreateProfesoreDto } from './dto/create-profesore.dto';
 import { UpdateProfesoreDto } from './dto/update-profesore.dto';
@@ -8,6 +19,7 @@ export class ProfesoresController {
   constructor(private readonly profesoresService: ProfesoresService) {}
 
   @Post()
+  @HttpCode(HttpStatus.CREATED)
   create(@Body() createProfesoreDto: CreateProfesoreDto) {
     return this.profesoresService.create(createProfesoreDto);
   }
@@ -18,17 +30,21 @@ export class ProfesoresController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profesoresService.findOne(+id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    return this.profesoresService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProfesoreDto: UpdateProfesoreDto) {
-    return this.profesoresService.update(+id, updateProfesoreDto);
+  @Put(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateProfesoreDto: UpdateProfesoreDto,
+  ) {
+    return this.profesoresService.update(id, updateProfesoreDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.profesoresService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    return this.profesoresService.remove(id);
   }
 }
