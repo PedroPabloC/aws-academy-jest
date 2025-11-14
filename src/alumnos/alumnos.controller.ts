@@ -42,4 +42,10 @@ export class AlumnosController {
   remove(@Param('id') id: string) {
     return this.alumnosService.remove(id);
   }
+
+  @Delete()
+  @HttpCode(HttpStatus.METHOD_NOT_ALLOWED)
+  deleteBase() {
+    return;
+  }
 }

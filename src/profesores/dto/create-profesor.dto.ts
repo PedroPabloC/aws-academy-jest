@@ -8,9 +8,9 @@ import {
 } from 'class-validator';
 
 export class CreateProfesorDto {
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  id?: string;
+  id?: number;
 
   @IsNumber()
   @IsNotEmpty()

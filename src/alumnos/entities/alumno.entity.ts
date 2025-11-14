@@ -1,5 +1,5 @@
 export class Alumno {
-  id: string;
+  id: number;
   nombres: string;
   apellidos: string;
   matricula: string;

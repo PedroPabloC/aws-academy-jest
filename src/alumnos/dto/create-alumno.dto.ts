@@ -8,9 +8,9 @@ import {
 } from 'class-validator';
 
 export class CreateAlumnoDto {
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  id?: string;
+  id?: number;
 
   @IsString()
   @IsNotEmpty()

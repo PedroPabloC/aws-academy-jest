@@ -45,4 +45,10 @@ export class ProfesoresController {
   remove(@Param('id') id: string) {
     return this.profesoresService.remove(id);
   }
+
+  @Delete()
+  @HttpCode(HttpStatus.METHOD_NOT_ALLOWED)
+  deleteBase() {
+    return;
+  }
 }

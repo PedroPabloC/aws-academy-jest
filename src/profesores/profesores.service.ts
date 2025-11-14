@@ -1,9 +1,7 @@
-// src/profesores/profesores.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProfesorDto } from './dto/create-profesor.dto';
 import { UpdateProfesorDto } from './dto/update-profesor.dto';
 import { Profesor } from './entities/profesor.entity';
-import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class ProfesoresService {
@@ -11,7 +9,7 @@ export class ProfesoresService {
 
   create(createProfesorDto: CreateProfesorDto) {
     const newProfesor: Profesor = {
-      id: createProfesorDto.id || uuid(),
+      id: createProfesorDto.id || Math.floor(Math.random() * 1000000),
       nombres: createProfesorDto.nombres,
       apellidos: createProfesorDto.apellidos,
       numeroEmpleado: createProfesorDto.numeroEmpleado,
@@ -26,7 +24,8 @@ export class ProfesoresService {
   }
 
   findOne(id: string) {
-    const profesor = this.profesores.find((p) => p.id === id);
+    const numericId = parseInt(id, 10);
+    const profesor = this.profesores.find((p) => p.id === numericId);
     if (!profesor) {
       throw new NotFoundException(`Profesor con id ${id} no encontrado`);
     }
@@ -34,15 +33,17 @@ export class ProfesoresService {
   }
 
   update(id: string, updateProfesorDto: UpdateProfesorDto) {
+    const numericId = parseInt(id, 10);
     const profesor = this.findOne(id);
-    const index = this.profesores.findIndex((p) => p.id === id);
+    const index = this.profesores.findIndex((p) => p.id === numericId);
     const profesorActualizado = { ...profesor, ...updateProfesorDto };
     this.profesores[index] = profesorActualizado;
     return profesorActualizado;
   }
 
   remove(id: string) {
+    const numericId = parseInt(id, 10);
     const profesor = this.findOne(id);
-    this.profesores = this.profesores.filter((p) => p.id !== id);
+    this.profesores = this.profesores.filter((p) => p.id !== numericId);
   }
 }
